@@ -3,6 +3,8 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 
+import { createPuppeteerConfig } from "./mermaid-runtime.mjs";
+
 async function markdownFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const nested = await Promise.all(entries.map(async (entry) => {
@@ -26,16 +28,30 @@ async function main() {
   const docsRoot = path.join(repositoryRoot, "docs");
   const files = [path.join(repositoryRoot, "README.md"), ...await markdownFiles(docsRoot)];
   const workDirectory = await mkdtemp(path.join(tmpdir(), "elaina-mermaid-"));
+  const puppeteerConfig = path.join(workDirectory, "puppeteer.json");
   let rendered = 0;
 
   try {
+    await writeFile(
+      puppeteerConfig,
+      `${JSON.stringify(createPuppeteerConfig())}\n`,
+      "utf8",
+    );
     for (const file of files) {
       const blocks = mermaidBlocks(await readFile(file, "utf8"));
       for (const diagram of blocks) {
         const input = path.join(workDirectory, `${rendered}.mmd`);
         const output = path.join(workDirectory, `${rendered}.svg`);
         await writeFile(input, `${diagram}\n`, "utf8");
-        const result = spawnSync("mmdc", ["--quiet", "--input", input, "--output", output], {
+        const result = spawnSync("mmdc", [
+          "--quiet",
+          "--puppeteerConfigFile",
+          puppeteerConfig,
+          "--input",
+          input,
+          "--output",
+          output,
+        ], {
           cwd: repositoryRoot,
           encoding: "utf8",
           shell: process.platform === "win32",
