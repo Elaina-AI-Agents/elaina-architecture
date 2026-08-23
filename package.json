@@ -1,0 +1,30 @@
+{
+  "name": "elaina-architecture",
+  "version": "1.0.0",
+  "private": true,
+  "description": "As-is architecture, contracts, and decision records for Elaina AI Agents.",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "check:drift": "node scripts/check-source-drift.mjs",
+    "check:secrets": "secretlint \"**/*.{md,json,jsonc,yaml,yml,mjs}\"",
+    "lint:diagrams": "node scripts/render-diagrams.mjs",
+    "lint:links": "markdown-link-check --config .markdown-link-check.json README.md docs/**/*.md",
+    "lint:markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
+    "lint:openapi": "spectral lint contracts/openapi.yaml",
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-lines=80 --test-coverage-functions=80 --test-coverage-branches=80 --test-coverage-include=scripts/check-source-drift.mjs",
+    "validate": "npm run lint:markdown && npm run lint:openapi && npm run lint:diagrams && npm run lint:links && npm run test:coverage && npm run check:secrets && npm run check:drift"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^11.16.0",
+    "@secretlint/secretlint-rule-preset-recommend": "^13.0.4",
+    "@stoplight/spectral-cli": "^6.16.3",
+    "markdown-link-check": "^3.15.0",
+    "markdownlint-cli2": "^0.23.2",
+    "secretlint": "^13.0.4"
+  }
+}

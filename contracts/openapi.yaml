@@ -1,0 +1,215 @@
+openapi: 3.1.0
+info:
+  title: Elaina Agent API — Observed Contract
+  version: 2026-08-23
+  description: >-
+    An as-is contract derived from ai-agents commit
+    0597bf2ff8e75d09c403f7992a03fe08cba5e0da. This document describes
+    observed validation and response behavior; it is not a production security
+    recommendation.
+  license:
+    name: MIT
+    identifier: MIT
+  contact:
+    name: Elaina AI Agents
+    url: https://github.com/Elaina-AI-Agents
+servers:
+  - url: http://localhost:3001
+    description: Observed local default
+tags:
+  - name: Chat
+    description: Agent response generation.
+  - name: Knowledge
+    description: File ingestion into the configured OpenAI vector store.
+paths:
+  /api/v1/character/chat:
+    post:
+      operationId: createCharacterChatResponse
+      tags: [Chat]
+      summary: Generate a chat response
+      description: >-
+        Selects an instruction string from the requested agent name, passes the
+        supplied history and current message to the OpenAI Responses API, and
+        enables web search. The implementation does not validate required fields
+        and does not use userId for authorization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatRequest"
+      responses:
+        "200":
+          description: A generated response or the observed fallback message.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatResponse"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /api/v1/character/add-knowledge/text:
+    post:
+      operationId: addCharacterTextKnowledge
+      tags: [Knowledge]
+      summary: Upload text knowledge
+      description: >-
+        Writes text to a temporary local file, uploads it to OpenAI, and attaches
+        the resulting file to the single configured vector store. userId and text
+        are the only fields explicitly checked by the implementation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TextKnowledgeRequest"
+      responses:
+        "200":
+          description: The file was accepted and queued in the configured vector store.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeUploadResponse"
+        "400":
+          description: userId or text is missing.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /api/v1/character/add-knowledge/pdf:
+    post:
+      operationId: addCharacterPdfKnowledge
+      tags: [Knowledge]
+      summary: Upload PDF knowledge
+      description: >-
+        Accepts one in-memory multipart file and attaches the uploaded OpenAI file
+        to the single configured vector store. The implementation checks only that
+        userId and a file are present; media type and size limits are not enforced.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PdfKnowledgeRequest"
+      responses:
+        "200":
+          description: The file was accepted and queued in the configured vector store.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeUploadResponse"
+        "400":
+          description: userId or file is missing.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /api/v1/character/knowledge:
+    get:
+      operationId: listCharacterKnowledge
+      tags: [Knowledge]
+      summary: List character knowledge
+      description: The route exists but always returns HTTP 501 in the pinned implementation.
+      responses:
+        "501":
+          description: Knowledge listing is not implemented.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Not implemented. Knowledge base now in vector store OpenAI.
+components:
+  responses:
+    InternalError:
+      description: The operation failed and returned the observed generic error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            error: Internal server error
+  schemas:
+    ChatHistoryItem:
+      type: object
+      description: >-
+        A history item forwarded to OpenAI without application-level schema
+        validation. Known callers use role and content.
+      properties:
+        role:
+          type: string
+        content:
+          type: string
+      additionalProperties: true
+    ChatRequest:
+      type: object
+      description: >-
+        No properties are marked required because the observed endpoint performs
+        no explicit request validation.
+      properties:
+        userId:
+          type: string
+          description: Caller-provided identity; observed but not used by this endpoint.
+        message:
+          type: string
+        agent:
+          type: string
+          description: Unknown names silently fall back to personapro_ai.
+        history:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChatHistoryItem"
+      additionalProperties: true
+    ChatResponse:
+      type: object
+      required: [response]
+      properties:
+        response:
+          type: string
+      additionalProperties: false
+    TextKnowledgeRequest:
+      type: object
+      required: [userId, text]
+      properties:
+        userId:
+          type: string
+          minLength: 1
+        title:
+          type: [string, "null"]
+        text:
+          type: string
+          minLength: 1
+      additionalProperties: true
+    PdfKnowledgeRequest:
+      type: object
+      required: [userId, file]
+      properties:
+        userId:
+          type: string
+          minLength: 1
+        title:
+          type: string
+        file:
+          type: string
+          format: binary
+      additionalProperties: true
+    KnowledgeUploadResponse:
+      type: object
+      required: [success, file_id]
+      properties:
+        success:
+          type: boolean
+          const: true
+        file_id:
+          type: string
+      additionalProperties: false
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+      additionalProperties: false

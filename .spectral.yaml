@@ -1,0 +1,9 @@
+extends:
+  - spectral:oas
+
+rules:
+  operation-tags: error
+  operation-operationId: error
+  operation-description: error
+  # The observed knowledge-list route intentionally has only a 501 response.
+  operation-success-response: off

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "inspectedAt": "2026-08-23",
+  "sources": [
+    {
+      "repository": "Elaina-AI-Agents/ai-agents",
+      "branch": "main",
+      "commit": "0597bf2ff8e75d09c403f7992a03fe08cba5e0da",
+      "role": "Express Agent API and agent definitions"
+    },
+    {
+      "repository": "Elaina-AI-Agents/whatsapp",
+      "branch": "main",
+      "commit": "cd2f34ae6fe09217d47556b4fec18d429847eb85",
+      "role": "WhatsApp channel adapter and Supabase history client"
+    },
+    {
+      "repository": "Elaina-AI-Agents/.github",
+      "branch": "main",
+      "commit": "5689f02df71f517041a0759840daef7da0dc0581",
+      "role": "Organization-level stated product intent"
+    }
+  ]
+}
