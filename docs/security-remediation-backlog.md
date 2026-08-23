@@ -1,6 +1,6 @@
-# Security remediation backlog
+# Security Remediation Backlog
 
-This backlog is advisory and intentionally does not modify the pinned source repositories. Priorities express risk order, not an approved implementation design.
+This appendix supports [06-security-model.md](06-security-model.md). This backlog is advisory and intentionally does not modify the pinned source repositories. Priorities express risk order, not an approved implementation design.
 
 ## P0 — contain before further public or production use
 
@@ -33,3 +33,8 @@ This backlog is advisory and intentionally does not modify the pinned source rep
 ## Disclosure hygiene
 
 Do not place active credentials, session databases, cookies, QR data, private logs, or raw incident evidence in public issues or pull requests. Coordinate sensitive remediation through an approved private channel.
+
+---
+
+Return to [06-security-model.md](06-security-model.md) for the trust model,
+or continue to [07-deployment.md](07-deployment.md).

@@ -1,6 +1,6 @@
-# Source traceability
+# Source Traceability
 
-Every link below targets an immutable commit. Line anchors are evidence pointers, not ownership boundaries. Ranges use one-based physical lines and were revalidated against the GitHub Contents API at each pinned commit on 2026-08-23.
+This appendix preserves the evidence discipline behind the numbered architecture narrative. Every link below targets an immutable commit. Line anchors are evidence pointers, not ownership boundaries. Ranges use one-based physical lines and were checked against the pinned source snapshots on 2026-08-23.
 
 ## WhatsApp adapter
 
@@ -45,3 +45,8 @@ Every link below targets an immutable commit. Line anchors are evidence pointers
 | `addCharacterTextKnowledge` | [`ai-agents/index.js` lines 15–39](https://github.com/Elaina-AI-Agents/ai-agents/blob/0597bf2ff8e75d09c403f7992a03fe08cba5e0da/index.js#L15-L39) |
 | `addCharacterPdfKnowledge` | [`ai-agents/index.js` lines 41–72](https://github.com/Elaina-AI-Agents/ai-agents/blob/0597bf2ff8e75d09c403f7992a03fe08cba5e0da/index.js#L41-L72) |
 | `listCharacterKnowledge` | [`ai-agents/index.js` lines 74–78](https://github.com/Elaina-AI-Agents/ai-agents/blob/0597bf2ff8e75d09c403f7992a03fe08cba5e0da/index.js#L74-L78) |
+
+---
+
+Start again at [01-context.md](01-context.md), or inspect the observed
+[OpenAPI contract](../contracts/openapi.yaml).

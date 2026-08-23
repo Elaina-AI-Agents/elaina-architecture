@@ -11,12 +11,13 @@
     "check:drift": "node scripts/check-source-drift.mjs",
     "check:secrets": "secretlint \"**/*.{md,json,jsonc,yaml,yml,mjs}\"",
     "lint:diagrams": "node scripts/render-diagrams.mjs",
-    "lint:links": "markdown-link-check --config .markdown-link-check.json README.md docs/**/*.md",
+    "lint:links": "markdown-link-check --config .markdown-link-check.json README.md $(find docs -type f -name '*.md' -print)",
     "lint:markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
     "lint:openapi": "spectral lint contracts/openapi.yaml",
     "test": "node --test",
     "test:coverage": "node --test --experimental-test-coverage --test-coverage-lines=80 --test-coverage-functions=80 --test-coverage-branches=80 --test-coverage-include=scripts/check-source-drift.mjs --test-coverage-include=scripts/mermaid-runtime.mjs",
-    "validate": "npm run lint:markdown && npm run lint:openapi && npm run lint:diagrams && npm run lint:links && npm run test:coverage && npm run check:secrets && npm run check:drift"
+    "verify:docs": "bash tools/verify-docs.sh",
+    "validate": "npm run verify:docs && npm run lint:markdown && npm run lint:openapi && npm run lint:diagrams && npm run lint:links && npm run test:coverage && npm run check:secrets && npm run check:drift"
   },
   "license": "MIT",
   "devDependencies": {
