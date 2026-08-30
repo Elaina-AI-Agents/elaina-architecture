@@ -26,6 +26,6 @@
     "@stoplight/spectral-cli": "^6.16.3",
     "markdown-link-check": "^3.15.0",
     "markdownlint-cli2": "^0.23.2",
-    "secretlint": "^13.0.4"
+    "secretlint": "^13.0.5"
   }
 }
