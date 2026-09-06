@@ -21,7 +21,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@mermaid-js/mermaid-cli": "^11.16.0",
+    "@mermaid-js/mermaid-cli": "^11.17.0",
     "@secretlint/secretlint-rule-preset-recommend": "^13.0.4",
     "@stoplight/spectral-cli": "^6.16.3",
     "markdown-link-check": "^3.15.0",
