@@ -23,7 +23,7 @@
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^11.16.0",
     "@secretlint/secretlint-rule-preset-recommend": "^13.0.4",
-    "@stoplight/spectral-cli": "^6.16.3",
+    "@stoplight/spectral-cli": "^6.17.0",
     "markdown-link-check": "^3.15.0",
     "markdownlint-cli2": "^0.23.2",
     "secretlint": "^13.0.4"
